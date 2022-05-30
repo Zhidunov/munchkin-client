@@ -34,7 +34,7 @@ function MainBoardContainer() {
   return (
     <Root>
       <FightCounter>
-        <Counter>Уровень: 5.</Counter>
+        <Counter2>Уровень: 5.</Counter2>
         <Counter>Текущая боевая сила: {forceCounter}.</Counter>
         <CounterButton onClick={() => setForceCounter((prev) => prev + 1)}>
           +
@@ -67,6 +67,15 @@ const Counter = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+const Counter2 = styled.span`
+  margin-right: 10px;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 100 !important;
 `;
 const CounterButton = styled.button`
   display: flex;

@@ -33,6 +33,7 @@ const Root = styled.div`
   height: 100vh;
   display: flex;
   background-color: #f3c88c;
+  font-family: Munchkin;
 `;
 
 export default App;

@@ -1,4 +1,6 @@
+import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
+import { setIsShowTooltip, setDescription } from "../store/slices/commonSlice";
 
 function Card({
   card = {},
@@ -9,6 +11,16 @@ function Card({
   onDragOver = () => {},
   onDrop = () => {},
 }) {
+  const dispatch = useDispatch();
+
+  const handleHover = (e) => {
+    dispatch(setDescription(card.text));
+    dispatch(setIsShowTooltip(true));
+  };
+  const handleLeave = (e) => {
+    dispatch(setIsShowTooltip(false));
+  };
+
   return (
     <CardContainer
       isRotated={card.isRotated}
@@ -18,6 +30,8 @@ function Card({
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      onMouseEnter={handleHover}
+      onMouseLeave={handleLeave}
     >
       <CardImage draggable={draggable} src={card.imageSrc} />
     </CardContainer>
@@ -29,9 +43,6 @@ const CardImage = styled.img`
   width: 130px;
 `;
 const CardContainer = styled.div`
-  min-width: 130px;
-  max-width: 130px;
-  height: 200px;
   overflow: hidden;
   border-radius: 12px;
   cursor: ${({ draggable }) => (draggable ? "grab" : "default")};
@@ -42,11 +53,11 @@ const CardContainer = styled.div`
     "transform: rotate(90deg); margin-left: 30px; margin-right: 30px;"};
   transition: transform 100ms;
   // для анимации увеличения карточки
-  /* :hover {
+  :hover {
     transform: scale(1.5);
     transition: transform 300ms;
     z-index: 1;
-  } */
+  }
 `;
 
 export default Card;
