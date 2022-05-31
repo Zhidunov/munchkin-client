@@ -54,7 +54,8 @@ const CardsInHand = styled.div`
   justify-content: center;
   align-items: center;
   width: 550px;
-  border: 1px solid #e88709;
+  border: 1px solid black;
+  border-top: none;
   overflow-y: auto;
   padding-top: 50px;
   padding-bottom: 50px;

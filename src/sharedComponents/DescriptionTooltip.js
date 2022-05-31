@@ -22,7 +22,8 @@ const Root = styled.div`
   opacity: ${({ isShowTooltip }) => (isShowTooltip ? "1" : "0")};
   font-size: 18px;
   line-height: 20px;
-  width: 240px;
+  max-width: 240px;
+  min-width: 240px;
   padding: 20px;
   background-color: rgba(255, 255, 255, 70%);
   border-radius: 20px;

@@ -5,7 +5,7 @@ import MainBoard from "./MainBoard";
 import StuffBoard from "./StuffBoard";
 import PrivateHand from "./PrivateHand";
 import { getCards, getMainBoard } from "../store/slices/boardsSlice";
-import DescriptionTooltip from "../sharedComponents/DescriptionTooltip";
+import SectionInfo from "../sections/sectionInfo";
 
 function GameBoard() {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ function GameBoard() {
   return (
     <Root>
       <LogContainer>
-        <DescriptionTooltip />
+        <SectionInfo />
       </LogContainer>
       <GameContainer>
         <StuffBoardContainer>
@@ -41,16 +41,13 @@ const Root = styled.div`
 `;
 const StuffBoardContainer = styled.div`
   height: 350px;
-  border: 1px solid #e88709;
+  border: 1px solid black;
+  border-top: none;
   max-width: 100%;
 `;
 const LogContainer = styled.div`
-  min-width: 260px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 10px;
+  min-width: 265px;
+  max-width: 265px;
 `;
 const GameContainer = styled.div`
   width: 100%;

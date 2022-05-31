@@ -36,7 +36,10 @@ export const getCards = () => async (dispatch, getState) => {
     data: { players },
   } = await axios.get(`http://localhost/players`);
 
-  const stuffBoards = players.map((player) => {
+  const tempData = players.filter((player) => player.name !== userName);
+  const currentPlayer = players.find((player) => player.name === userName);
+
+  const stuffBoards = [currentPlayer, ...tempData].map((player) => {
     if (player.name === userName) {
       return {
         name: "Мой шмот",
@@ -57,8 +60,6 @@ export const getCards = () => async (dispatch, getState) => {
       isPersonalCards: false,
     };
   });
-
-  const currentPlayer = players.find((player) => player.name === userName);
 
   dispatch(setStuffBoards(stuffBoards));
   if (currentPlayer) {
