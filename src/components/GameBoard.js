@@ -4,15 +4,16 @@ import styled from "styled-components/macro";
 import MainBoard from "./MainBoard";
 import StuffBoard from "./StuffBoard";
 import PrivateHand from "./PrivateHand";
-import { getCards, getMainBoard } from "../store/slices/boardsSlice";
+import { getRoom } from "../store/slices/boardsSlice";
+import { getCurrentUser } from "../store/slices/userSlice";
 import SectionInfo from "../sections/sectionInfo";
 
 function GameBoard() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCards());
-    dispatch(getMainBoard());
+    dispatch(getCurrentUser());
+    dispatch(getRoom());
   }, []);
 
   return (

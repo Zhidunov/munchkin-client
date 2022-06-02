@@ -4,21 +4,26 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     isAuth: false,
-    userName: "Никита",
+    userId: "user_3",
+    roomId: "1",
   },
   reducers: {
     setIsAuth: (state, action) => {
       state.isAuth = action.payload;
     },
-    setUser: (state, action) => {
-      state.userName = action.payload;
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+    },
+    setRoomId: (state, action) => {
+      state.roomId = action.payload;
     },
   },
 });
 
-export const { setIsAuth, setUser } = authSlice.actions;
+export const { setIsAuth, setUserId, setRoomId } = authSlice.actions;
 
 export const selectIsAuth = (state) => state.auth.isAuth;
-export const selectUserName = (state) => state.auth.userName;
+export const selectUserId = (state) => state.auth.userId;
+export const selectRoomId = (state) => state.auth.roomId;
 
 export default authSlice.reducer;

@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
-import { setIsShowTooltip, setDescription } from "../store/slices/commonSlice";
+import { setIsShowTooltip, setTooltipCard } from "../store/slices/commonSlice";
 
 function Card({
   card = {},
@@ -13,17 +13,17 @@ function Card({
 }) {
   const dispatch = useDispatch();
 
-  const handleHover = (e) => {
-    dispatch(setDescription(card.text));
+  const handleHover = () => {
+    dispatch(setTooltipCard(card));
     dispatch(setIsShowTooltip(true));
   };
-  const handleLeave = (e) => {
+  const handleLeave = () => {
     dispatch(setIsShowTooltip(false));
   };
 
   return (
     <CardContainer
-      isRotated={card.isRotated}
+      isRotated={card.is_rotated}
       draggable={draggable}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
@@ -33,7 +33,7 @@ function Card({
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
     >
-      <CardImage draggable={draggable} src={card.imageSrc} />
+      <CardImage draggable={draggable} src={card.image_src} />
     </CardContainer>
   );
 }

@@ -1,30 +1,30 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Login from "./components/Login";
 import { useSelector, useDispatch } from "react-redux";
 import { selectIsAuth } from "./store/slices/authSlice";
 import GameBoard from "./components/GameBoard";
-import { setUsers, setMessages } from "./store/slices/usersSlice";
-import { socket } from "./api/api";
+// import { setUsers, setMessages } from "./store/slices/usersSlice";
+// import { socket } from "./api/api";
 import styled from "styled-components";
 
 function App() {
   const isAuth = useSelector(selectIsAuth);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket.on("ROOM:JOINED", (users) => {
-      dispatch(setUsers(users));
-      console.log("Присоединился новый пользователь", users);
-    });
-    socket.on("ROOM:LEAVED", (users) => {
-      dispatch(setUsers(users));
-      console.log("Пользователь покинул игру", users);
-    });
-    socket.on("ROOM:SENDED_MESSAGE", (messages) => {
-      dispatch(setMessages(messages));
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on("ROOM:JOINED", (users) => {
+  //     dispatch(setUsers(users));
+  //     console.log("Присоединился новый пользователь", users);
+  //   });
+  //   socket.on("ROOM:LEAVED", (users) => {
+  //     dispatch(setUsers(users));
+  //     console.log("Пользователь покинул игру", users);
+  //   });
+  //   socket.on("ROOM:SENDED_MESSAGE", (messages) => {
+  //     dispatch(setMessages(messages));
+  //   });
+  // }, []);
 
   return <Root>{!isAuth ? <GameBoard /> : <Login />}</Root>;
 }

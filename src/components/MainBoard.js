@@ -44,7 +44,7 @@ function MainBoardContainer() {
         </CounterButton>
       </FightCounter>
       <MainBoard onDragOver={handleBoardDragOver} onDrop={handleBoardDrop}>
-        {mainBoard.cards.map((card) => (
+        {mainBoard?.cards_on_board?.map((card) => (
           <Card
             key={`temp_card_${card.id}`}
             card={card}

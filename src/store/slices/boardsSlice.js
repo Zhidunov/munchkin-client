@@ -3,10 +3,8 @@ import axios from "axios";
 
 const initialState = {
   stuffBoards: [],
-  mainBoard: {
-    cards: [],
-  },
-  privateCards: [],
+  mainBoard: {},
+  players: [],
 };
 
 export const boardsSlice = createSlice({
@@ -19,62 +17,39 @@ export const boardsSlice = createSlice({
     setMainBoard: (state, action) => {
       state.mainBoard = action.payload;
     },
-    setPrivateCards: (state, action) => {
-      state.privateCards = action.payload;
+    setPlayers: (state, action) => {
+      state.players = action.payload;
     },
   },
 });
 
-export const { setStuffBoards, setMainBoard, setPrivateCards } =
-  boardsSlice.actions;
+export const { setStuffBoards, setMainBoard, setPlayers } = boardsSlice.actions;
 
-export const getCards = () => async (dispatch, getState) => {
+export const getRoom = () => async (dispatch, getState) => {
   const {
-    auth: { userName },
+    auth: { userId, roomId },
   } = getState();
-  const {
-    data: { players },
-  } = await axios.get(`http://localhost/players`);
+  const { data } = await axios.get(
+    `http://localhost/rooms?userId=${userId}&roomId=${roomId}`
+  );
 
-  const tempData = players.filter((player) => player.name !== userName);
-  const currentPlayer = players.find((player) => player.name === userName);
-
-  const stuffBoards = [currentPlayer, ...tempData].map((player) => {
-    if (player.name === userName) {
-      return {
-        name: "Мой шмот",
-        id: player.id,
-        order: 0,
-        lvl: player.level,
-        cards: player.cards_on_board,
-        isPersonalCards: true,
-      };
-    }
-
-    return {
-      name: player.name,
-      id: player.id,
-      order: 1,
-      lvl: player.level,
-      cards: player.cards_on_board,
-      isPersonalCards: false,
-    };
-  });
-
-  dispatch(setStuffBoards(stuffBoards));
-  if (currentPlayer) {
-    dispatch(setPrivateCards(currentPlayer.private_cards));
-  }
+  dispatch(setMainBoard(data.main_board));
+  dispatch(setPlayers(data.players));
 };
 
-export const getMainBoard = () => async (dispatch) => {
-  const { data } = await axios.get(`http://localhost/mainboard`);
+export const getStuffBoards = () => async (dispatch, getState) => {
+  const {
+    auth: { userId, roomId },
+  } = getState();
+  const { data } = await axios.get(
+    `http://localhost/boards?userId=${userId}&roomId=${roomId}`
+  );
 
-  dispatch(setMainBoard(data));
+  dispatch(setStuffBoards(data.other_players_stuff));
 };
 
 export const selectStuffBoards = (state) => state.boards.stuffBoards;
 export const selectMainBoard = (state) => state.boards.mainBoard;
-export const selectPrivateCards = (state) => state.boards.privateCards;
+export const selectPlayers = (state) => state.boards.players;
 
 export default boardsSlice.reducer;

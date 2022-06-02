@@ -1,12 +1,24 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import styled from "styled-components/macro";
-import { selectStuffBoards } from "../store/slices/boardsSlice";
+import { selectPlayers, selectStuffBoards } from "../store/slices/boardsSlice";
 import Card from "../sharedComponents/Card";
+import { getStuffBoards } from "../store/slices/boardsSlice";
+import { selectCurrentUser } from "../store/slices/userSlice";
+import cardsCounterIcon from "../assets/img/cards_counter.png";
 
 function StuffBoard() {
+  const dispatch = useDispatch();
+
+  const players = useSelector(selectPlayers);
   const stuffBoards = useSelector(selectStuffBoards);
+  const currentUser = useSelector(selectCurrentUser);
+
+  useEffect(() => {
+    dispatch(getStuffBoards());
+  }, []);
 
   const handleDragStart = (card, board) => (event) => {
     event.target.style.opacity = "0";
@@ -34,27 +46,44 @@ function StuffBoard() {
   return (
     <StyledTabs>
       <TabList>
-        {stuffBoards.map((board) => (
-          <Tab key={board.name}>{`${board.name}, уровень: ${board.lvl}`}</Tab>
+        <Tab key={`tab_${currentUser?.id}`}>
+          {`Мой шмот, уровень: ${currentUser?.level}`}
+          <StyledIcon alt="" src={cardsCounterIcon} />
+        </Tab>
+        {players?.map((player) => (
+          <Tab key={player.id}>
+            {`${player.name}, уровень: ${player.level},`}
+            <StyledIcon alt="" src={cardsCounterIcon} />
+            {player.cards_in_hand}
+          </Tab>
         ))}
       </TabList>
-      {stuffBoards.map((board) => (
+      <StyledTabPanel
+        key={`StyledTabPanel_${currentUser?.id}`}
+        onDragOver={handleBoardDragOver}
+        onDrop={handleBoardDrop()}
+      >
+        {currentUser?.public_hand?.map((card) => (
+          <Card
+            key={card.id}
+            card={card}
+            draggable
+            onDragStart={handleDragStart(card)}
+            onDragEnd={handleDragEnd}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop(card)}
+          />
+        ))}
+      </StyledTabPanel>
+      {stuffBoards?.map((board) => (
         <StyledTabPanel
-          key={board.name}
+          key={`StyledTabPanel_${board.id}`}
           onDragOver={handleBoardDragOver}
           onDrop={handleBoardDrop(board)}
         >
           {board.cards.map((card) => (
-            <Card
-              key={card.id}
-              card={card}
-              draggable={board.isPersonalCards}
-              onDragStart={handleDragStart(card, board)}
-              onDragEnd={handleDragEnd}
-              onDragLeave={handleDragLeave}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop(card, board)}
-            />
+            <Card key={card.id} card={card} />
           ))}
         </StyledTabPanel>
       ))}
@@ -67,6 +96,10 @@ const StyledTabPanel = styled(TabPanel)`
   flex-direction: row;
   padding-left: 50px;
   align-items: center;
+`;
+const StyledIcon = styled.img`
+  height: 25px;
+  padding-left: 10px;
 `;
 const StyledTabs = styled(Tabs)`
   .react-tabs__tab-panel--selected {
