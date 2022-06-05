@@ -20,17 +20,34 @@ export const boardsSlice = createSlice({
     setPlayers: (state, action) => {
       state.players = action.payload;
     },
+    setCardsOnBoard: (state, action) => {
+      state.mainBoard.cards_on_board = action.payload;
+    },
+    setCardSelection: (state, action) => {
+      state.mainBoard.cards_on_board = state.mainBoard.cards_on_board.map(
+        (card) =>
+          card.id === action.payload.id
+            ? { ...card, is_selected: !card.is_selected }
+            : card
+      );
+    },
   },
 });
 
-export const { setStuffBoards, setMainBoard, setPlayers } = boardsSlice.actions;
+export const {
+  setStuffBoards,
+  setMainBoard,
+  setPlayers,
+  setCardsOnBoard,
+  setCardSelection,
+} = boardsSlice.actions;
 
 export const getRoom = () => async (dispatch, getState) => {
   const {
-    auth: { userId, roomId },
+    auth: { userName, roomId },
   } = getState();
   const { data } = await axios.get(
-    `http://localhost/rooms?userId=${userId}&roomId=${roomId}`
+    `http://localhost/room?userName=${userName}&roomId=${roomId}`
   );
 
   dispatch(setMainBoard(data.main_board));
@@ -39,10 +56,10 @@ export const getRoom = () => async (dispatch, getState) => {
 
 export const getStuffBoards = () => async (dispatch, getState) => {
   const {
-    auth: { userId, roomId },
+    auth: { userName, roomId },
   } = getState();
   const { data } = await axios.get(
-    `http://localhost/boards?userId=${userId}&roomId=${roomId}`
+    `http://localhost/boards?userName=${userName}&roomId=${roomId}`
   );
 
   dispatch(setStuffBoards(data.other_players_stuff));

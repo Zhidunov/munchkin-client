@@ -2,15 +2,18 @@ import { useSelector } from "react-redux";
 import styled from "styled-components/macro";
 import { selectCurrentUser } from "../store/slices/userSlice";
 import Card from "../sharedComponents/Card";
+import { socket } from "../api/api";
 
 function PrivateHand() {
   const currentUser = useSelector(selectCurrentUser);
 
   const handleDragStart = (card) => (event) => {
     event.target.style.opacity = "0";
+    socket.emit("GAME:STARTED_MOVING_CARD", { card, board: "PRIVATE" });
   };
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (card) => (event) => {
     event.target.style.opacity = "1";
+    socket.emit("GAME:FINISHED_MOVING_CARD", { card, board: "PRIVATE" });
   };
   const handleDragLeave = (event) => {
     event.preventDefault();
@@ -37,7 +40,7 @@ function PrivateHand() {
           card={card}
           draggable
           onDragStart={handleDragStart(card)}
-          onDragEnd={handleDragEnd}
+          onDragEnd={handleDragEnd(card)}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop(card)}

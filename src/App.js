@@ -26,7 +26,7 @@ function App() {
   //   });
   // }, []);
 
-  return <Root>{!isAuth ? <GameBoard /> : <Login />}</Root>;
+  return <Root>{isAuth ? <GameBoard /> : <Login />}</Root>;
 }
 
 const Root = styled.div`

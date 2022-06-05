@@ -24,6 +24,7 @@ function Card({
   return (
     <CardContainer
       isRotated={card.is_rotated}
+      isSelected={card.is_selected}
       draggable={draggable}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
@@ -48,6 +49,7 @@ const CardContainer = styled.div`
   cursor: ${({ draggable }) => (draggable ? "grab" : "default")};
   user-select: none;
   margin: 10px;
+  ${({ isSelected }) => isSelected && "border: 5px solid red"};
   ${({ isRotated }) =>
     isRotated &&
     "transform: rotate(90deg); margin-left: 30px; margin-right: 30px;"};

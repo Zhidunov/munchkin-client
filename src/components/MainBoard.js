@@ -1,19 +1,34 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components/macro";
-import { selectMainBoard } from "../store/slices/boardsSlice";
+import { selectMainBoard, setCardSelection } from "../store/slices/boardsSlice";
+import { selectRoomId } from "../store/slices/authSlice";
 import Card from "../sharedComponents/Card";
+import { socket } from "../api/api";
 
 function MainBoardContainer() {
   const mainBoard = useSelector(selectMainBoard);
+  const roomId = useSelector(selectRoomId);
+  const dispatch = useDispatch();
 
   const [forceCounter, setForceCounter] = useState(0);
 
+  useEffect(() => {
+    socket.on("GAME:STARTED_MOVING_CARD", ({ card, board }) => {
+      dispatch(setCardSelection(card));
+    });
+    socket.on("GAME:FINISHED_MOVING_CARD", ({ card, board }) => {
+      dispatch(setCardSelection(card));
+    });
+  }, []);
+
   const handleDragStart = (card) => (event) => {
     event.target.style.opacity = "0";
+    socket.emit("GAME:STARTED_MOVING_CARD", { card, board: "MAIN", roomId });
   };
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (card) => (event) => {
     event.target.style.opacity = "1";
+    socket.emit("GAME:FINISHED_MOVING_CARD", { card, board: "MAIN", roomId });
   };
   const handleDragLeave = (event) => {
     event.preventDefault();
@@ -50,7 +65,7 @@ function MainBoardContainer() {
             card={card}
             draggable={true}
             onDragStart={handleDragStart(card)}
-            onDragEnd={handleDragEnd}
+            onDragEnd={handleDragEnd(card)}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop(card)}

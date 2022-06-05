@@ -17,10 +17,10 @@ export const { setUser } = userSlice.actions;
 
 export const getCurrentUser = () => async (dispatch, getState) => {
   const {
-    auth: { userId, roomId },
+    auth: { userName, roomId },
   } = getState();
   const { data } = await axios.get(
-    `http://localhost/user?userId=${userId}&roomId=${roomId}`
+    `http://localhost/user?userName=${userName}&roomId=${roomId}`
   );
 
   dispatch(setUser(data.current_user));

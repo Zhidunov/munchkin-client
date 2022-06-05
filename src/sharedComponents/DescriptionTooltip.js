@@ -9,7 +9,6 @@ function DescriptionTooltip() {
   const isShowTooltip = useSelector(selectIsShowTooltip);
   const tooltipCard = useSelector(selectTooltipCard);
 
-  console.log("🚀 ~ handleHover ~ isShowTooltip", isShowTooltip);
   return (
     <Root isShowTooltip={isShowTooltip}>
       <CardName dangerouslySetInnerHTML={{ __html: tooltipCard.name }} />
